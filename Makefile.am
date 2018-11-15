@@ -24,11 +24,12 @@ SUBDIRS =   \
 
 BUILT_SOURCES = geos_revision.h
 
-EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
+EXTRA_DIST = acsite.m4 .editorconfig makefile.vc nmake.opt autogen.bat CMakeLists.txt \
   cmake/modules/CheckPrototypeExists.cmake \
   cmake/modules/COPYING-CMAKE-SCRIPTS \
   cmake/modules/GenerateSourceGroups.cmake \
-  cmake/cmake_uninstall.cmake.in geos_revision.h
+  cmake/cmake_uninstall.cmake.in geos_revision.h \
+  README.md
 
 ACLOCAL_AMFLAGS = -I macros
 
@@ -38,7 +39,7 @@ gen-ChangeLog:
 	cd $(distdir) && owd=`pwd` && \
   cd ../ && cd $(srcdir) && \
 	if test -d .git; then \
-		git2cl > $${owd}/ChangeLog; \
+		git log --pretty --numstat --summary | git2cl > $${owd}/ChangeLog; \
 	elif test -d .svn; then \
 		svn2cl --authors=authors.svn -i -o $${owd}/ChangeLog; \
 	elif test -f ChangeLog; then \
@@ -66,5 +67,5 @@ valgrindcheck:
 
 check-local:
 	! find . -name '*.cpp' -o -name '*.h' | \
-		grep -v ^./tests/xmltester/tinyxml | \
+		grep -v tests/xmltester/tinyxml | \
 		xargs grep -n '[[:space:]]$$'

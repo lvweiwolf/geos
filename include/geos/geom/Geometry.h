@@ -286,7 +286,7 @@ public:
 	/// (or 1 if this is not a collection)
 	virtual std::size_t getNumGeometries() const { return 1; }
 
-	/// Returns a pointer to the nth Geometry int this collection
+	/// Returns a pointer to the nth Geometry in this collection
 	/// (or self if this is not a collection)
 	virtual const Geometry* getGeometryN(std::size_t /*n*/) const { return this; }
 
@@ -583,6 +583,14 @@ public:
 	/// Returns the smallest convex Polygon that contains
 	/// all the points in the Geometry.
 	virtual Geometry* convexHull() const;
+
+	/**
+     * Computes a new geometry which has all component coordinate sequences
+     * in reverse order (opposite orientation) to this one.
+     *
+     * @return a reversed geometry
+     */
+	virtual Geometry* reverse() const=0;
 
 	/** \brief
 	 * Returns a Geometry representing the points shared by

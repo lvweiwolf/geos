@@ -5,33 +5,39 @@ Project homepage: http://geos.osgeo.org/
 
 ## Build status
 
-| branch / CI | Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor |
-|:---         |:---    |:---    |:---    |:---       |:---       |:---      |
-| master      | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Master/) | [![winnie](https://debbie.postgis.net:444/view/GEOS/job/GEOS_Master/badge/icon)](https://debbie.postgis.net:444/view/GEOS/job/GEOS_Master/) | [![dronie](https://drone.osgeo.org/api/badges/geos/geos/status.svg?branch=master)](https://drone.osgeo.org/geos/geos?branch=master) | [![travis](https://travis-ci.org/OSGeo/geos.svg?branch=master)](https://travis-ci.org/OSGeo/geos?branch=master) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/master/build.svg)](https://gitlab.com/geos/libgeos/commits/master) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/master?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/master) |
-| svn-3.6     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.6)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.6/) | [![winnie](https://debbie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.6/badge/icon)](https://debbie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.6/) | [![dronie](https://drone.osgeo.org/api/badges/geos/geos/status.svg?branch=svn-3.6)](https://drone.osgeo.org/geos/geos?branch=svn-3.6) | [![travis](https://travis-ci.org/OSGeo/geos.svg?branch=svn-3.6)](https://travis-ci.org/OSGeo/geos?branch=svn-3.6) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.6/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-3.6) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/svn-3.6?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/svn-3.6) |
+| branch / CI | Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor | Bessie | Bessie32 |
+|:---         |:---    |:---    |:---    |:---       |:---       |:---      |:---    |:---    |
+| master      | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Master/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Master/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Master/) | [![dronie](https://drone.osgeo.org/api/badges/geos/geos/status.svg?branch=master)](https://drone.osgeo.org/geos/geos?branch=master) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=master)](https://travis-ci.com/libgeos/geos?branch=master) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/master/build.svg)](https://gitlab.com/geos/libgeos/commits/master) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/master?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/master) | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&BRANCH=master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | [![bessie32](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie32&BRANCH=master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie32) ||
+| 3.7     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.7)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.7/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.7/) | [![dronie](https://drone.osgeo.org/api/badges/geos/geos/status.svg?branch=3.7)](https://drone.osgeo.org/geos/geos?branch=3.7) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=3.7)](https://travis-ci.com/libgeos/geos?branch=3.7) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.7/build.svg)](https://gitlab.com/geos/libgeos/commits/3.7) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/3.7?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/svn-3.6) ||
+| 3.6     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.6)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.6/) | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.6/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.6/) | [![dronie](https://drone.osgeo.org/api/badges/geos/geos/status.svg?branch=svn-3.6)](https://drone.osgeo.org/geos/geos?branch=svn-3.6) | [![travis](https://travis-ci.com/libgeos/geos.svg?branch=svn-3.6)](https://travis-ci.com/libgeos/geos?branch=svn-3.6) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.6/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-3.6) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/svn-3.6?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/svn-3.6) |
 
 More on: https://trac.osgeo.org/geos#BuildandInstall
 
 ## Building, testing, installing
 
+### Prerequisites
+
+Building GEOS requires a C++11 compiler
+
 ### Unix
 
-Using Autotools:
+#### Using Autotools:
 
     ./autogen.sh  # in ${srcdir}, if obtained from SVN or GIT
-    ${srcdir}/configure # in build dir
+    (mkdir obj && cd obj && ../configure)
 
-Using CMake:
+#### Using CMake:
 
-    cmake ${srcdir} # in build dir
+    (mkdir build && cd build && cmake ..)
 
-Now, all versions:
+#### Either Autotools or CMake
 
     make
     make check
-    make install # as root
-    ldconfig # as root
+    make install # (as root, assuming PREFIX is not writable by the build user)
 
+    On a GNU/Linux system, if installed in a system prefix:
+      ldconfig # as root
 
 ### Microsoft Windows
 
@@ -98,12 +104,12 @@ Basic usage examples can be found in `doc/example.cpp`.
 Ruby bindings are fully supported. To build, use the `--enable-ruby` option
 when configuring:
 
-    ./configure ... --enable-ruby
+    ./configure .. --enable-ruby
 
 Since version 3.6.0 PHP bindings are not included in the core
 library anymore but available as a separate project:
 
-    https://git.osgeo.org/gogs/geos/php-geos
+* https://git.osgeo.org/gitea/geos/php-geos
 
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 

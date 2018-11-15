@@ -86,6 +86,8 @@ public:
 
 	Geometry *clone() const override { return new MultiPoint(*this); }
 
+	Geometry* reverse() const override { return clone(); }
+
 protected:
 
 	/**
@@ -110,7 +112,7 @@ protected:
 
 	MultiPoint(const MultiPoint &mp): Geometry(mp), GeometryCollection(mp) {}
 
-	const Coordinate* getCoordinateN(int n) const;
+	const Coordinate* getCoordinateN(size_t n) const;
 };
 
 #ifdef _MSC_VER

@@ -2,7 +2,7 @@ dnl
 dnl configure.in - autoconf input template to produce ./configure script
 dnl
 dnl version 2.52 is required for Cygwin libtool support
-AC_PREREQ([2.52])
+AC_PREREQ([2.63])
 
 dnl local vars to hold user's preferences --------------------------------
 AC_INIT([include/geos.h])
@@ -14,18 +14,19 @@ dnl -- JTS_PORT: the version of JTS this release is bound to
 JTS_PORT=1.13.0
 
 dnl -- Version info for the CAPI
-CAPI_INTERFACE_CURRENT=12
+CAPI_INTERFACE_CURRENT=13
 CAPI_INTERFACE_REVISION=0
-CAPI_INTERFACE_AGE=11
+CAPI_INTERFACE_AGE=12
 
 dnl
 dnl -- Release versions / C++ library SONAME will use these
 dnl -- encoding ABI break at every release
 dnl
 VERSION_MAJOR=3
-VERSION_MINOR=7
+VERSION_MINOR=8
 VERSION_PATCH=0dev
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
+VERSION_RELEASE=`echo "$VERSION" | sed -E 's/^([[0-9]+\.[0-9]+\.[0-9]+]).*$/\1/'`
 
 dnl CAPI_VERSION_MAJOR=$(($CAPI_INTERFACE_CURRENT-$CAPI_INTERFACE_AGE))
 dnl the following should be more portable
@@ -142,9 +143,9 @@ AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
 WARNFLAGS=""
 AC_LANG_PUSH([C++])
 dnl Available in GCC 5.1
-AX_CHECK_COMPILE_FLAG([-Wsuggest-override], [WARNFLAGS="$WARNFLAGS -Wsuggest-override"])
+AX_CHECK_COMPILE_FLAG([-Wsuggest-override -Werror], [WARNFLAGS="$WARNFLAGS -Wsuggest-override"])
 dnl Available in clang 3.5
-AX_CHECK_COMPILE_FLAG([-Wmissing-override], [WARNFLAGS="$WARNFLAGS -Wmissing-override"])
+AX_CHECK_COMPILE_FLAG([-Wmissing-override -Werror], [WARNFLAGS="$WARNFLAGS -Wmissing-override"])
 AC_LANG_POP([C++])
 
 dnl In order for AC_LIBTOOL_COMPILER_OPTION to use
@@ -372,6 +373,7 @@ AC_SUBST(VERSION)
 AC_SUBST(VERSION_MAJOR)
 AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_PATCH)
+AC_SUBST(VERSION_RELEASE)
 AC_SUBST(INTERFACE_CURRENT)
 AC_SUBST(INTERFACE_REVISION)
 AC_SUBST(INTERFACE_AGE)

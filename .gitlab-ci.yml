@@ -1,8 +1,11 @@
-# See https://gitlab.com/help/ci/quick_start/README
-test:
-  script:
+before_script:
     - apt-get update -qq
     - apt-get install -y build-essential autoconf automake libtool lsb-release
+    - lsb_release -a
+    - uname -a
+
+test:
+  script:
     - lsb_release -a
     - uname -a
     - ./autogen.sh

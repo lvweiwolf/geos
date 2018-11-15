@@ -25,10 +25,10 @@ namespace geos {
 namespace index {
 namespace strtree {
 
-BoundablePair::BoundablePair(const Boundable* boundable1, const Boundable* boundable2, ItemDistance* itemDistance) :
-	boundable1(boundable1),
-	boundable2(boundable2),
-	itemDistance(itemDistance)
+BoundablePair::BoundablePair(const Boundable* p_boundable1, const Boundable* p_boundable2, ItemDistance* p_itemDistance) :
+	boundable1(p_boundable1),
+	boundable2(p_boundable2),
+	itemDistance(p_itemDistance)
 {
 	mDistance = distance();
 }
@@ -97,7 +97,7 @@ void BoundablePair::expandToQueue(BoundablePairQueue & priQ, double minDistance)
 		return;
 	}
 
-	throw new geos::util::IllegalArgumentException("neither boundable is composite");
+	throw geos::util::IllegalArgumentException("neither boundable is composite");
 }
 
 void BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther, BoundablePairQueue & priQ, double minDistance) {

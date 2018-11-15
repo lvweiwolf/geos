@@ -130,8 +130,10 @@ geos_unit_SOURCES = \
 	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
+	capi/GEOSGeom_extentTest.cpp \
 	capi/GEOSGeom_setPrecisionTest.cpp \
 	capi/GEOSGetCentroidTest.cpp \
+	capi/GEOSCAPIDefinesTest.cpp \
 	capi/GEOSContainsTest.cpp \
 	capi/GEOSConvexHullTest.cpp \
 	capi/GEOSDistanceTest.cpp \
@@ -163,9 +165,11 @@ geos_unit_SOURCES = \
 	capi/GEOSSTRtreeTest.cpp \
 	capi/GEOSRelateBoundaryNodeRuleTest.cpp \
 	capi/GEOSRelatePatternMatchTest.cpp \
+	capi/GEOSReverseTest.cpp \
 	capi/GEOSUnaryUnionTest.cpp \
 	capi/GEOSisValidDetailTest.cpp \
-	capi/GEOSisClosedTest.cpp
+	capi/GEOSisClosedTest.cpp \
+	capi/GEOSInterpolateTest.cpp
 
 noinst_HEADERS = \
 	utility.h

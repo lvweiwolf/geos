@@ -23,7 +23,9 @@ endif()
 #################################################################################
 # Set GEOS project
 #################################################################################
-project(GEOS VERSION 3.7.0 LANGUAGES C CXX)
+project(GEOS VERSION 3.8.0 LANGUAGES C CXX)
+# OPTIONS: "", "dev", "rc1" etc.
+SET(GEOS_PATCH_WORD "dev")
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
@@ -43,9 +45,14 @@ message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
 
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
-set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
-set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}")
+set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
 set(VERSION "${GEOS_VERSION}")
+
+# Copy version components into different variable names to match those used
+# by autotools for *.h.in files
+set(VERSION_MAJOR "${GEOS_VERSION_MAJOR}")
+set(VERSION_MINOR "${GEOS_VERSION_MINOR}")
+set(VERSION_PATCH "${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
 
 # JTS_PORT is the version of JTS this release is bound to
 set(JTS_PORT 1.13.0)
@@ -117,6 +124,8 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
   add_definitions(-D_DEBUG)
 endif()
 
+add_definitions(-DUSE_UNSTABLE_GEOS_CPP_API)
+
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
   # General options
@@ -131,7 +140,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     "Forcing IEEE 754 using flag -ffloat-store - ${GEOS_ENABLE_FLOATSTORE}")
 
   # Warnings specification
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -fno-implicit-inline-templates -Wconversion -pedantic -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -fno-implicit-inline-templates -Wconversion -pedantic -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion -Wshadow")
 
   # Turn on Position Independent Code generation for GEOS C shared library
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wall -Wconversion -pedantic -Wmissing-prototypes -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion")
@@ -191,35 +200,6 @@ else()
     check_type_size("int64_t" HAVE_INT64_T_64)
   else()
     check_type_size("long long int" HAVE_LONG_LONG_INT_64)
-  endif()
-endif()
-
-# check functions and macros
-include(CheckPrototypeExists)
-include(CheckSymbolExists)
-
-check_prototype_exists(isnan cmath HAVE_STD_ISNAN)
-if(NOT HAVE_STD_ISNAN)
-  if(MSVC)
-    check_prototype_exists(_isnan float.h HAVE_ISNAN)
-  elseif(APPLE)
-    check_prototype_exists(__isnand math.h HAVE_ISNAND_XCODE)
-    if(NOT HAVE_ISNAND_XCODE)
-      check_prototype_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
-    endif()
-  else()
-    check_symbol_exists(isnan math.h HAVE_ISNAN)
-  endif()
-endif()
-
-check_prototype_exists(isfinite cmath HAVE_STD_ISFINITE)
-
-if(NOT HAVE_STD_ISFINITE)
-  if(MSVC)
-    check_prototype_exists(_finite float.h HAVE_FINITE)
-  else()
-    #CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    check_symbol_exists(isfinite math.h HAVE_ISFINITE)
   endif()
 endif()
 

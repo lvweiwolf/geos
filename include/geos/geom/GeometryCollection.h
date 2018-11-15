@@ -154,8 +154,17 @@ public:
 	/// Returns the number of geometries in this collection
 	std::size_t getNumGeometries() const override;
 
-	/// Returns a pointer to the nth Geometry int this collection
+	/// Returns a pointer to the nth Geometry in this collection
 	const Geometry* getGeometryN(std::size_t n) const override;
+
+	/**
+     * Creates a GeometryCollection with
+     * every component reversed.
+     * The order of the components in the collection are not reversed.
+     *
+     * @return a GeometryCollection in the reverse order
+     */
+	Geometry* reverse() const override;
 
 protected:
 

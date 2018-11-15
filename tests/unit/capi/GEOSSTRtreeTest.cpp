@@ -11,7 +11,7 @@
 #include <cmath>
 
 struct INTPOINT {
-	INTPOINT(int x, int y) : x(x), y(y) {}
+	INTPOINT(int p_x, int p_y) : x(p_x), y(p_y) {}
 	int x;
 	int y;
 };
@@ -227,6 +227,21 @@ namespace tut
 		GEOSGeom_destroy(g2);
 		GEOSGeom_destroy(g3);
 		GEOSGeom_destroy(g4);
+		GEOSSTRtree_destroy(tree);
+	}
+
+	// querying empty tree should not crash (see #730)
+    template<>
+    template<>
+    void object::test<7>() {
+	    GEOSSTRtree* tree = GEOSSTRtree_create(16);
+	    GEOSGeometry* q = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))");
+	    GEOSSTRtree_query(tree, q, [](void* item, void* userdata) {
+	   		assert(item); // make unused parameter warning go away
+			assert(userdata);
+        }, nullptr);
+
+		GEOSGeom_destroy(q);
 		GEOSSTRtree_destroy(tree);
 	}
 

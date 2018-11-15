@@ -24,6 +24,7 @@
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/Dimension.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Envelope.h>
@@ -252,12 +253,12 @@ GeometryCollection::normalize()
 Envelope::Ptr
 GeometryCollection::computeEnvelopeInternal() const
 {
-	Envelope::Ptr envelope(new Envelope());
+	Envelope::Ptr p_envelope(new Envelope());
 	for (size_t i=0; i<geometries->size(); i++) {
 		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
-		envelope->expandToInclude(env);
+		p_envelope->expandToInclude(env);
 	}
-	return envelope;
+	return p_envelope;
 }
 
 int
@@ -365,6 +366,25 @@ GeometryTypeId
 GeometryCollection::getGeometryTypeId() const
 {
 	return GEOS_GEOMETRYCOLLECTION;
+}
+
+Geometry*
+GeometryCollection::reverse() const
+{
+	if (isEmpty()) {
+		return clone();
+	}
+
+	auto* reversed = new std::vector<Geometry*>{geometries->size()};
+
+	std::transform(geometries->begin(),
+				   geometries->end(),
+				   reversed->begin(),
+				   [](const Geometry* g) {
+					   return g->reverse();
+				   });
+
+	return getFactory()->createGeometryCollection(reversed);
 }
 
 } // namespace geos::geom

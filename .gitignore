@@ -7,11 +7,13 @@ geos_revision.h
 .deps
 .vimrc
 .dirstamp
+.tm_properties
 *.o
 *.lo
 *.la
 *.log
 *.trs
+*.exe
 macros/libtool.m4
 macros/ltoptions.m4
 macros/ltsugar.m4

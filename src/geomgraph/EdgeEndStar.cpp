@@ -56,7 +56,7 @@ Coordinate&
 EdgeEndStar::getCoordinate()
 {
 	static Coordinate nullCoord(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
-	if (edgeMap.size()==0) return nullCoord;
+	if (edgeMap.empty()) return nullCoord;
 
 	EdgeEndStar::iterator it=begin();
 	EdgeEnd *e=*it;
@@ -215,7 +215,7 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 	// the left side of the edge
 
 	// if no edges, trivially consistent
-	if (edgeMap.size()==0) return true;
+	if (edgeMap.empty()) return true;
 
 	// initialize startLoc to location of last L side (if any)
 	assert(*rbegin());
@@ -269,7 +269,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	EdgeEndStar::iterator it;
 
 	// initialize loc to location of last L side (if any)
-	for (EdgeEndStar::iterator it=beginIt; it!=endIt; ++it)
+	for (it=beginIt; it!=endIt; ++it)
 	{
 		EdgeEnd *e=*it;
 		assert(e);
@@ -366,4 +366,3 @@ operator<< (std::ostream& os, const EdgeEndStar& es)
 
 } // namespace geos.geomgraph
 } // namespace geos
-

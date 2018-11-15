@@ -148,7 +148,7 @@ SubgraphDepthLocater::getDepth(const Coordinate& p)
 	findStabbedSegments(p, stabbedSegments);
 
 	// if no segments on stabbing line subgraph must be outside all others
-	if (stabbedSegments.size()==0) return 0;
+	if (stabbedSegments.empty()) return 0;
 
 	sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLessThen());
 
@@ -234,8 +234,8 @@ SubgraphDepthLocater::findStabbedSegments(
 //
 #define SKIP_LS 1
 
-	int n = static_cast<int>(pts->getSize())-1;
-	for (int i=0; i<n; ++i) {
+	auto n = pts->getSize() - 1;
+	for (size_t i = 0; i < n; ++i) {
 #ifndef SKIP_LS
 		seg.p0=pts->getAt(i);
 		seg.p1=pts->getAt(i + 1);

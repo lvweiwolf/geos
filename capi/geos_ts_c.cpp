@@ -17,6 +17,7 @@
  ***********************************************************************/
 
 #include <geos/platform.h>  // for FINITE
+#include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
@@ -27,6 +28,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/geom/LineSegment.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -124,8 +126,12 @@ using namespace std;
 // import the most frequently used definitions globally
 using geos::geom::Geometry;
 using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::MultiLineString;
+using geos::geom::MultiPolygon;
 using geos::geom::Polygon;
 using geos::geom::CoordinateSequence;
+using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
 
 using geos::io::WKTReader;
@@ -413,7 +419,7 @@ GEOSFree_r (GEOSContextHandle_t extHandle, void* buffer)
 
 //-----------------------------------------------------------
 // relate()-related functions
-//  return 0 = false, 1 = true, 2 = error occured
+//  return 0 = false, 1 = true, 2 = error occurred
 //-----------------------------------------------------------
 
 char
@@ -1010,14 +1016,14 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
 {
     if ( 0 == extHandle )
     {
-        return 0;
+        return 2;
     }
 
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
     {
-        return 0;
+        return 2;
     }
 
     try
@@ -1372,7 +1378,7 @@ GEOSLength_r(GEOSContextHandle_t extHandle, const Geometry *g, double *length)
 
     if ( 0 == extHandle )
     {
-        return 2;
+        return 0;
     }
 
     GEOSContextHandleInternal_t *handle = 0;
@@ -3193,6 +3199,49 @@ GEOSGeomGetY_r(GEOSContextHandle_t extHandle, const Geometry *g1, double *y)
 }
 
 /*
+ * For POINT
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetZ_r(GEOSContextHandle_t extHandle, const Geometry *g1, double *z)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        using geos::geom::Point;
+        const Point *po = dynamic_cast<const Point *>(g1);
+        if ( ! po )
+        {
+            handle->ERROR_MESSAGE("Argument is not a Point");
+            return 0;
+        }
+        *z = po->getZ();
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+/*
  * Call only on polygon
  * Return a copy of the internal Geometry.
  */
@@ -3727,6 +3776,39 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
     return out;
 }
 
+Geometry *
+GEOSReverse_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return nullptr;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return nullptr;
+    }
+
+    try
+    {
+        return g->reverse();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return nullptr;
+}
+
  void*
 GEOSGeom_getUserData_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
@@ -4150,6 +4232,40 @@ GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle, const CoordinateSequ
         const std::size_t dim = cs->getDimension();
         *dims = static_cast<unsigned int>(dim);
 
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSCoordSeq_isCCW_r(GEOSContextHandle_t extHandle, const CoordinateSequence *cs, char *val)
+{
+    assert(cs != nullptr);
+    assert(val != nullptr);
+
+    if (extHandle == nullptr) {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = nullptr;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+    try
+    {
+        *val = geos::algorithm::CGAlgorithms::isCCW(cs);
         return 1;
     }
     catch (const std::exception &e)
@@ -4670,6 +4786,154 @@ GEOSGeom_getCoordinateDimension_r(GEOSContextHandle_t extHandle, const Geometry 
     try
     {
         return g->getCoordinateDimension();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSGeom_getXMin_r(GEOSContextHandle_t extHandle, const Geometry *g, double *value)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        if (g->isEmpty())
+        {
+            return 0;
+        }
+
+        *value = g->getEnvelopeInternal()->getMinX();
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSGeom_getXMax_r(GEOSContextHandle_t extHandle, const Geometry *g, double *value)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        if (g->isEmpty())
+        {
+            return 0;
+        }
+
+        *value = g->getEnvelopeInternal()->getMaxX();
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSGeom_getYMin_r(GEOSContextHandle_t extHandle, const Geometry *g, double *value)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        if (g->isEmpty())
+        {
+            return 0;
+        }
+
+        *value = g->getEnvelopeInternal()->getMinY();
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSGeom_getYMax_r(GEOSContextHandle_t extHandle, const Geometry *g, double *value)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        if (g->isEmpty())
+        {
+            return 0;
+        }
+
+        *value = g->getEnvelopeInternal()->getMaxY();
+        return 1;
     }
     catch (const std::exception &e)
     {
@@ -6177,7 +6441,7 @@ GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
                       geos::index::strtree::STRtree *tree,
                       const geos::geom::Geometry* geom)
 {
-    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic_r( extHandle, tree, geom, geom->getEnvelope(), NULL, NULL);
+    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic_r( extHandle, tree, geom, geom, nullptr, nullptr);
 }
 
 const void *
@@ -6907,10 +7171,52 @@ GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Ge
 	}
 	catch(...)
 	{
-		handle->ERROR_MESSAGE("Unknow exception thrown");
+		handle->ERROR_MESSAGE("Unknown exception thrown");
 	}
 
 	return NULL;
+}
+
+int
+GEOSSegmentIntersection_r(GEOSContextHandle_t extHandle,
+    double ax0, double ay0, double ax1, double ay1,
+    double bx0, double by0, double bx1, double by1,
+    double* cx, double* cy)
+{
+    if ( 0 == extHandle ) return 0;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return 0;
+
+    try
+    {
+        geos::geom::LineSegment a(ax0, ay0, ax1, ay1);
+        geos::geom::LineSegment b(bx0, by0, bx1, by1);
+        geos::geom::Coordinate isect;
+
+        bool intersects = a.intersection(b, isect);
+
+        if (!intersects)
+        {
+            return -1;
+        }
+
+        *cx = isect.x;
+        *cy = isect.y;
+
+        return 1;
+    }
+    catch(const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch(...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
 }
 
 } /* extern "C" */

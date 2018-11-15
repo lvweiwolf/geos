@@ -92,7 +92,7 @@ DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 	if (isForwardVar) {
 		init(edge->getCoordinate(0), edge->getCoordinate(1));
 	} else {
-		int n=edge->getNumPoints()-1;
+		auto  n = edge->getNumPoints() - 1;
 		init(edge->getCoordinate(n), edge->getCoordinate(n-1));
 	}
 	computeDirectedLabel();
@@ -144,15 +144,15 @@ DirectedEdge::isLineEdge()
 bool
 DirectedEdge::isInteriorAreaEdge()
 {
-	bool isInteriorAreaEdge=true;
+	bool p_isInteriorAreaEdge=true;
 	for (int i=0; i<2; i++) {
 		if (!(label.isArea(i)
 			&& label.getLocation(i,Position::LEFT )==Location::INTERIOR
 			&& label.getLocation(i,Position::RIGHT)==Location::INTERIOR)) {
-				isInteriorAreaEdge=false;
+				p_isInteriorAreaEdge=false;
 		}
 	}
-	return isInteriorAreaEdge;
+	return p_isInteriorAreaEdge;
 }
 
 /*private*/

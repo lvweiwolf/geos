@@ -666,6 +666,16 @@ GEOSGeomGetY(const Geometry *g, double *y)
 }
 
 /*
+ * For POINT
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetZ(const Geometry *g1, double *z)
+{
+	return GEOSGeomGetZ_r(handle, g1, z);
+}
+
+/*
  * Call only on polygon
  * Return a copy of the internal Geometry.
  */
@@ -720,6 +730,12 @@ Geometry *
 GEOSLineMerge(const Geometry *g)
 {
     return GEOSLineMerge_r( handle, g );
+}
+
+Geometry *
+GEOSReverse(const Geometry *g)
+{
+    return GEOSReverse_r( handle, g );
 }
 
 int
@@ -849,6 +865,12 @@ GEOSCoordSeq_getDimensions(const CoordinateSequence *s, unsigned int *dims)
     return GEOSCoordSeq_getDimensions_r( handle, s, dims );
 }
 
+int
+GEOSCoordSeq_isCCW(const CoordinateSequence *s, char *is_ccw)
+{
+    return GEOSCoordSeq_isCCW_r(handle, s, is_ccw);
+}
+
 void
 GEOSCoordSeq_destroy(CoordinateSequence *s)
 {
@@ -913,6 +935,26 @@ int
 GEOSGeom_getCoordinateDimension(const Geometry *g)
 {
     return GEOSGeom_getCoordinateDimension_r( handle, g );
+}
+
+int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getXMin_r(handle, g, value);
+}
+
+int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getYMin_r(handle, g, value);
+}
+
+int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getXMax_r(handle, g, value);
+}
+
+int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getYMax_r(handle, g, value);
 }
 
 Geometry *
@@ -1360,6 +1402,17 @@ Geometry*
 GEOSVoronoiDiagram(const Geometry *g, const Geometry *env, double tolerance, int onlyEdges)
 {
   return GEOSVoronoiDiagram_r(handle, g, env, tolerance, onlyEdges);
+}
+
+int
+GEOSSegmentIntersection(double ax0, double ay0, double ax1, double ay1,
+                        double bx0, double by0, double bx1, double by1,
+                        double* cx, double* cy)
+{
+    return GEOSSegmentIntersection_r(handle,
+        ax0, ay0, ax1, ay1,
+        bx0, by0, bx1, by1,
+        cx, cy);
 }
 
 } /* extern "C" */

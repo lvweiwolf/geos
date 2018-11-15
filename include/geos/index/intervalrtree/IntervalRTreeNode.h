@@ -55,9 +55,9 @@ public:
 		max( DoubleNegInfinity )
 	{ }
 
-	IntervalRTreeNode( double min, double max)
-	:	min( min ),
-		max( max )
+	IntervalRTreeNode( double p_min, double p_max)
+	:	min( p_min ),
+		max( p_max )
 	{ }
 
 	virtual ~IntervalRTreeNode()
@@ -86,15 +86,8 @@ public:
 	//public:
 		static bool compare( const IntervalRTreeNode * n1, const IntervalRTreeNode * n2)
 		{
-			//IntervalRTreeNode * n1 = dynamic_cast<IntervalRTreeNode *>( o1);
-			//IntervalRTreeNode * n2 = dynamic_cast<IntervalRTreeNode *>( o2);
-
-			double mid1 = (n1->getMin() + n1->getMax()) / 2;
-			double mid2 = (n2->getMin() + n2->getMax()) / 2;
-
-			//if (mid1 < mid2) return -1;
-			//if (mid1 > mid2) return 1;
-			//return 0;
+			double mid1 = n1->getMin() + n1->getMax();
+			double mid2 = n2->getMin() + n2->getMax();
 
 			return mid1 > mid2;
 		}
